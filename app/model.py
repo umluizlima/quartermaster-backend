@@ -91,6 +91,70 @@ class Category(db.Model):
             if field in data:
                 setattr(self, field, data[field])
 
+
+class Item(db.Model):
+    """Data model for items."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer, unique=True, nullable=True)
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.Text)
+    category_id = db.Column(db.Integer,
+                            db.ForeignKey('category.id'),
+                            nullable=True)
+
+    def to_dict(self):
+        """Return a Item object formatted as dict."""
+        obj = {
+            "id": self.id,
+            "number": self.number,
+            "name": self.name,
+            "description": self.description,
+            "category_id": self.category_id
+        }
+        return obj
+
+    def from_dict(self, data):
+        """Fill Item attributes from given dictionary."""
+        for field in ['number', 'name', 'description', 'category_id']:
+            if field in data:
+                setattr(self, field, data[field])
+
+
+class Reservation(db.Model):
+    """Data model for reservations."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    date_start = db.Column(db.DateTime, nullable=False)
+    date_end = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('user.id'),
+                        nullable=True)
+    thirdparty_id = db.Column(db.Integer,
+                              db.ForeignKey('thirdparty.id'),
+                              nullable=True)
+
+    def to_dict(self):
+        """Return a Reservation object formatted as dict."""
+        obj = {
+            "id": self.id,
+            "name": self.name,
+            "date_start": self.date_start,
+            "date_end": self.date_end,
+            "user_id": self.user_id,
+            "thirdparty_id": self.thirdparty_id
+        }
+        return obj
+
+    def from_dict(self, data):
+        """Fill Reservation attributes from given dictionary."""
+        for field in ['name', 'date_start', 'date_end',
+                      'user_id', 'thirdparty_id']:
+            if field in data:
+                setattr(self, field, data[field])
+
+
 # class User(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     first_name = db.Column(db.String(120), nullable=False)
