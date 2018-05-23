@@ -3,31 +3,31 @@ from flask import (
     Blueprint, request, abort, jsonify
 )
 from app.model import db, User
+from app.controller.error import bad_request
 from app.controller.auth import login_required, is_admin
 
-bp = Blueprint('users', __name__, url_prefix='/user')
+bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('', methods=["POST"])
 @login_required
 def create():
     """Create a new user."""
-    data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first()
-    if user:
-        response = {
-            'message': 'User already exists.'
-        }
-        return jsonify(response), 202
-    try:
-        user = User()
-        for key in data.keys():
-            exec(f"user.{key} = data['{key}']")
-        db.session.add(user)
-        db.session.commit()
-        return jsonify(user.to_dict()), 201
-    except Exception as e:
-        abort(400)
+    data = request.get_json() or {}
+    # Check if no required key is missing from data
+    keys = ['first_name', 'last_name', 'email', 'password']
+    if not all([key in data.keys() for key in keys]):
+        return bad_request('must include first_name, last_name, \
+email and password fields')
+    # Check if unique attributes collide
+    if User.query.filter_by(email=data['email']).first():
+        return bad_request('please use a different email address')
+    # Create new instance and commit to database
+    user = User()
+    user.from_dict(data, new_user=True)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify(user.to_dict()), 201
 
 
 @bp.route('', methods=["GET"])
@@ -41,35 +41,29 @@ def read_all():
 @login_required
 def read(id):
     """Return user with given id."""
-    user = User.query.filter_by(id=id).first()
-    if not user:
-        abort(404)
-    return jsonify(user.to_dict())
+    return jsonify(User.query.get_or_404(id).to_dict())
 
 
 @bp.route('/<int:id>', methods=["PUT"])
 @login_required
 def update(id):
     """Update an user's entry."""
-    user = User.query.filter_by(id=id).first()
-    if not user:
-        abort(404)
-    data = request.get_json()
-    for key in data.keys():
-        if key not in user.to_dict().keys():
-            abort(400)
-        exec(f"user.{key} = data['{key}']")
+    user = User.query.get_or_404(id)
+    data = request.get_json() or {}
+    # Check if unique attributes collide
+    if 'email' in data and data['email'] != user.email and \
+            User.query.filter_by(email=data['email']).first():
+        return bad_request('please use a different email address')
+    user.from_dict(data, new_user=False)
     db.session.commit()
     return jsonify(user.to_dict())
 
 
 @bp.route('/<int:id>', methods=["DELETE"])
-@login_required
+@is_admin
 def delete(id):
     """Delete an user."""
-    user = User.query.filter_by(id=id).first()
-    if not user:
-        abort(404)
+    user = User.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
     return '', 204

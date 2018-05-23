@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -15,6 +16,14 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
+    def set_password(self, password):
+        """Set user password."""
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        """Check if user password matches given password."""
+        return check_password_hash(self.password, password)
+
     def to_dict(self):
         """Return a User object formatted as dict."""
         obj = {
@@ -26,7 +35,61 @@ class User(db.Model):
         }
         return obj
 
+    def from_dict(self, data, new_user=False):
+        """Fill User attributes from given dictionary."""
+        for field in ['first_name', 'last_name', 'email', 'admin']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
 
+
+class Thirdparty(db.Model):
+    """Data model for thirdparties."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def to_dict(self):
+        """Return a Thirdparty object formatted as dict."""
+        obj = {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email
+        }
+        return obj
+
+    def from_dict(self, data):
+        """Fill Thirdparty attributes from given dictionary."""
+        for field in ['first_name', 'last_name', 'email']:
+            if field in data:
+                setattr(self, field, data[field])
+
+
+class Category(db.Model):
+    """Data model for categories."""
+
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.Text)
+
+    def to_dict(self):
+        """Return a Category object formatted as dict."""
+        obj = {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description
+        }
+        return obj
+
+    def from_dict(self, data):
+        """Fill Category attributes from given dictionary."""
+        for field in ['name', 'description']:
+            if field in data:
+                setattr(self, field, data[field])
 
 # class User(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
@@ -37,13 +100,6 @@ class User(db.Model):
 #     admin = db.Column(db.Boolean, nullable=False, default=False)
 #     lendings = db.relationship('Lending', backref='user', lazy=True)
 #     reservations = db.relationship('Reservation', backref='user', lazy=True)
-#
-#
-# class Category(db.Model):
-#     id = db.Column(db.Integer(), primary_key=True)
-#     name = db.Column(db.String(80), unique=True, nullable=False)
-#     description = db.Column(db.Text)
-#     items = db.relationship('Item', backref='category', lazy=True)
 #
 #
 # class Item(db.Model):

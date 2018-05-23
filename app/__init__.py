@@ -21,12 +21,18 @@ def create_app():
     except OSError:
         pass
 
+    # initialize database
     from app.model import db, migrate
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from app.controller import auth, user
+    # register blueprints
+    from app.controller import (
+        auth, user, category, thirdparty
+    )
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
+    app.register_blueprint(category.bp)
+    app.register_blueprint(thirdparty.bp)
 
     return app
