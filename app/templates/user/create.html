@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block main %}
+<article>
+  <header>
+    <h2>Cadastrar usuário</h2>
+    <a href="{{ url_for('users.read_all') }}"><button class="material-icons">arrow_back</button></a>
+  </header>
+  <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    <form method="post">
+      <fieldset>
+        <label for="first_name">Nome:</label>
+        <input type="text" name="first_name" autofocus required>
+        <label for="last_name">Sobrenome:</label>
+        <input type="text" name="last_name" required>
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <label for="password">Senha:</label>
+        <input type="password" name="password" required>
+        <label for="admin">Admin?</label>
+        <input type="checkbox" name="admin" value="true">
+        <button type="submit" name="submit" class="material-icons">done</button>
+      </fieldset>
+    </form>
+  </main>
+</article>
+{% endblock %}

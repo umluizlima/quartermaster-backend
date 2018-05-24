@@ -1,44 +1,41 @@
-import functools
+import functools, os
 
 from flask import (
-    Blueprint, g, request, session, jsonify
+    Blueprint, g, request, session, jsonify, render_template, redirect,
+    url_for, abort, flash
 )
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.model import User
 
 bp = Blueprint('auth', __name__, url_prefix='')
 
 
-@bp.route('/login', methods=["POST"])
+@bp.route('/login', methods=["GET", "POST"])
 def login():
     """Handle user login."""
-    data = request.get_json()
-    message = None
+    if request.method == "POST":
+        data = request.form
+        message = None
 
-    user = User.query.filter_by(email=data['email']).first()
-    if user is None:
-        message = 'Wrong email.'
-    # elif not check_password_hash(user.password, data['password']):
-    elif user.password != data['password']:
-        message = 'Wrong password.'
+        user = User.query.filter_by(email=data['email']).first()
+        if user is None:
+            message = 'Email inválido'
+        elif not user.check_password(data['password']):
+            message = 'Senha incorreta'
 
-    if message is None:
-        session.clear()
-        session['user_id'] = user.id
-        return '', 204
-
-    response = {
-        'message': message
-    }
-    return jsonify(response), 401
+        if message is None:
+            session.clear()
+            session['user_id'] = user.id
+            return redirect(url_for('main.index'))
+        flash(message)
+    return render_template('auth/login.html', title="Login")
 
 
 @bp.route('/logout', methods=["GET"])
 def logout():
     """Clear logged user from session."""
     session.clear()
-    return '', 204
+    return redirect(url_for('main.index'))
 
 
 def login_required(view):
@@ -46,10 +43,9 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            response = {
-                'message': 'You must be logged in to access this resource.'
-            }
-            return jsonify(response), 401
+            message = 'Você precisa entrar para acessar este recurso'
+            flash(message)
+            return redirect(url_for('auth.login'))
 
         return view(**kwargs)
 
@@ -62,10 +58,9 @@ def is_admin(view):
     @login_required
     def wrapped_view(**kwargs):
         if not g.user.admin:
-            response = {
-                'message': 'You must be admin to access this resource.'
-            }
-            return jsonify(response), 401
+            message = 'Você precisa ser administrador para acessar este recurso'
+            flash(message)
+            return redirect(url_for('main.index'))
 
         return view(**kwargs)
 

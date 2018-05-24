@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block main %}
+<article>
+  <header>
+    <h2>Terceiros</h2>
+    <a href="{{ url_for('main.index') }}"><button class="material-icons">arrow_back</button></a>
+    <a href="{{ url_for('thirdparties.create') }}"><button class="material-icons">add</button></a>
+  </header>
+  <main>
+    <table>
+      <tr>
+        <th></th>
+        <th>Nome</th>
+        <th>Sobrenome</th>
+        <th>Email</th>
+      </tr>
+      {% for thirdparty in rows %}
+      <tr>
+        <td>
+          <a href="{{ url_for('thirdparties.update', id=thirdparty.id) }}"><button class="material-icons">edit</button></a>
+          <a href="{{ url_for('thirdparties.delete', id=thirdparty.id) }}"><button class="material-icons">delete</button></a>
+        </td>
+        <td>{{ thirdparty.first_name }}</td>
+        <td>{{ thirdparty.last_name }}</td>
+        <td>{{ thirdparty.email }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </main>
+</article>
+{% endblock %}

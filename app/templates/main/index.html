@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block main %}
+<article>
+  <header>
+    <h2>Menu</h2>
+  </header>
+  <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    <ul>
+      {% if g.user.admin %}
+        <li><a href="{{ url_for('users.read_all') }}"><button>Usuários</button></a></li>
+      {% endif %}
+      <li><a href="{{ url_for('categories.read_all') }}"><button>Categorias</button></a></li>
+      <li><a href="{{ url_for('items.read_all') }}"><button>Itens</button></a></li>
+      <li><a href="{{ url_for('thirdparties.read_all') }}"><button>Terceiros</button></a></li>
+    </ul>
+  </main>
+  <footer>
+    <a href="{{ url_for('auth.logout') }}"><button>Sair</button></a>
+  </footer>
+</article>
+{% endblock %}

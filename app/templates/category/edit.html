@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block main %}
+<article>
+  <header>
+    <h2>Editar categoria</h2>
+    <a href="{{ url_for('categories.read_all') }}"><button class="material-icons">arrow_back</button></a>
+  </header>
+  <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    <form method="post">
+      <fieldset>
+        <label for="name">Nome:</label>
+        <input type="text" name="name" value="{{ category.name }}" autofocus required>
+        <label for="description">Descrição:</label>
+        <input type="text" name="description" {% if category.description %}value="{{ category.description }}"{% endif %}>
+        <button type="submit" name="submit" class="material-icons">done</button>
+      </fieldset>
+    </form>
+  </main>
+</article>
+{% endblock %}
