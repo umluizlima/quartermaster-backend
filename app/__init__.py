@@ -28,8 +28,9 @@ def create_app():
 
     # register blueprints
     from app.controller import (
-        auth, user, category, thirdparty, item
+        main, auth, user, category, thirdparty, item
     )
+    app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(category.bp)
