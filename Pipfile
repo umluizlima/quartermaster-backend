@@ -9,6 +9,8 @@ pytest = "*"
 python-dotenv = "*"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
+gunicorn = "*"
+"psycopg2" = "*"
 
 [dev-packages]
 
