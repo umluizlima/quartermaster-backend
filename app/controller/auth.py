@@ -13,22 +13,24 @@ bp = Blueprint('auth', __name__, url_prefix='')
 @bp.route('/login', methods=["GET", "POST"])
 def login():
     """Handle user login."""
-    if request.method == "POST":
-        data = request.form
-        message = None
+    if g.user is None:
+        if request.method == "POST":
+            data = request.form
+            message = None
 
-        user = User.query.filter_by(email=data['email']).first()
-        if user is None:
-            message = 'Email inválido'
-        elif not user.check_password(data['password']):
-            message = 'Senha incorreta'
+            user = User.query.filter_by(email=data['email']).first()
+            if user is None:
+                message = 'Email inválido'
+            elif not user.check_password(data['password']):
+                message = 'Senha incorreta'
 
-        if message is None:
-            session.clear()
-            session['user_id'] = user.id
-            return redirect(url_for('main.index'))
-        flash(message)
-    return render_template('auth/login.html', title="Login")
+            if message is None:
+                session.clear()
+                session['user_id'] = user.id
+                return redirect(url_for('main.index'))
+            flash(message)
+        return render_template('auth/login.html', title="Login")
+    return redirect(url_for('main.index'))
 
 
 @bp.route('/logout', methods=["GET"])

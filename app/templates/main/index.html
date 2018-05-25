@@ -14,10 +14,11 @@
       {% endif %}
       <li><a href="{{ url_for('categories.read_all') }}"><button>Categorias</button></a></li>
       <li><a href="{{ url_for('items.read_all') }}"><button>Itens</button></a></li>
-      <li><a href="{{ url_for('thirdparties.read_all') }}"><button>Terceiros</button></a></li>
+      <!-- <li><a href="{{ url_for('thirdparties.read_all') }}"><button>Terceiros</button></a></li> -->
     </ul>
   </main>
   <footer>
+    <button id="btnAdd">Instalar</button>
     <a href="{{ url_for('auth.logout') }}"><button>Sair</button></a>
   </footer>
 </article>

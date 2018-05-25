@@ -10,7 +10,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('/new', methods=["GET", "POST"])
-# @is_admin
+@is_admin
 def create():
     """Create a new user."""
     if request.method == "POST":
