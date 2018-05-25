@@ -196,6 +196,10 @@ tr:nth-child(even) {
   color: var(--cdg-red);
 }
 
+#btnAdd {
+  visibility: hidden;
+}
+
 @media screen and (min-width: 800px) {
   body > header {
     flex-direction: column;
