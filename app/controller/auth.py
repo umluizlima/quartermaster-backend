@@ -37,7 +37,7 @@ def login():
 def logout():
     """Clear logged user from session."""
     session.clear()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('auth.login'))
 
 
 def login_required(view):

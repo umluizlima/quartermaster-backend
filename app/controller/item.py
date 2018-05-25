@@ -26,8 +26,8 @@ def create():
                 Item.query.filter_by(registry=data['registry']).first():
             message = 'Tombo já existe'
         # Check if foreignkey exists
-        if 'category_id' in data and \
-                not Category.query.filter_by(id=data['category_id']).first():
+        if 'category' in data and data['category'] != '' and \
+                not Category.query.filter_by(name=data['category']).first():
             message = 'Categoria não existe'
 
         if message is None:
@@ -67,6 +67,11 @@ def update(id):
         if 'registry' in data and data['registry'] != item.registry and \
                 Item.query.filter_by(registry=data['registry']).first():
             message = 'Tombo já existe'
+
+        # Check if foreignkey exists
+        if 'category' in data and data['category'] != '' and \
+                not Category.query.filter_by(name=data['category']).first():
+            message = 'Categoria não existe'
 
         if message is None:
             item.from_dict(data)

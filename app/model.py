@@ -38,7 +38,7 @@ class User(db.Model):
     def from_dict(self, data, new_user=False):
         """Fill User attributes from given dictionary."""
         for field in ['first_name', 'last_name', 'email']:
-            if field in data and data[field] != '':
+            if field in data:
                 setattr(self, field, data[field])
         if 'admin' in data and bool(data['admin']) is True:
             setattr(self, 'admin', True)
@@ -69,7 +69,7 @@ class Thirdparty(db.Model):
     def from_dict(self, data):
         """Fill Thirdparty attributes from given dictionary."""
         for field in ['first_name', 'last_name', 'email']:
-            if field in data and data[field] != '':
+            if field in data:
                 setattr(self, field, data[field])
 
 
@@ -92,7 +92,7 @@ class Category(db.Model):
     def from_dict(self, data):
         """Fill Category attributes from given dictionary."""
         for field in ['name', 'description']:
-            if field in data and data[field] != '':
+            if field in data:
                 setattr(self, field, data[field])
 
 
@@ -121,8 +121,12 @@ class Item(db.Model):
     def from_dict(self, data):
         """Fill Item attributes from given dictionary."""
         for field in ['registry', 'name', 'description', 'category']:
-            if field in data and data[field] != '':
+            if field in data:
                 setattr(self, field, data[field])
+            if 'category' in data and data['category'] != '':
+                setattr(self, 'category', data['category'])
+            else:
+                setattr(self, 'category', None)
 
 
 # class Lending(db.Model):
