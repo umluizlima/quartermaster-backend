@@ -124,8 +124,9 @@ def check_category_data(data: dict, new: bool = False) -> str or None:
 
     if 'description' in data:
         # Check for type.
-        if type(data['description']) is not str:
-            return 'description must be string'
+        if type(data['description']) is not str and \
+                data['description'] is not None:
+            return 'description must be string or null'
         # Check for expected regex pattern.
         # description = re.compile(r'')
         # if re.fullmatch(description, data['description']) is None:
