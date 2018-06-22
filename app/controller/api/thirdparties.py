@@ -5,7 +5,7 @@ the POST, GET, PUT and DELETE http methods for its CRUD operations,
 respectively.
 
 Endpoints
-    GET - /thirdparties - return the collection of all users.
+    GET - /thirdparties - return the collection of all thirdparties.
     GET - /thirdparties/<id> - return a thirdparty with given id number.
     POST - /thirdparties - register a new thirdparty.
     PUT - /thirdparties/<id> - modify a thirdparty with given id number.
@@ -31,10 +31,11 @@ def create_thirdparty():
     if error:
         return bad_request(error)
 
-    # Check if unique attributes collide
+    # Check if unique attributes collide.
     if Thirdparty.query.filter_by(email=data['email']).first():
         return bad_request('please use a different email address')
 
+    # Create new instance and commit to database.
     thirdparty = Thirdparty()
     thirdparty.from_dict(data)
     db.session.add(thirdparty)
