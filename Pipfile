@@ -12,6 +12,7 @@ flask-migrate = "*"
 gunicorn = "*"
 "psycopg2" = "*"
 flask-sslify = "*"
+pyjwt = "*"
 
 [dev-packages]
 

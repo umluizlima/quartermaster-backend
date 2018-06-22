@@ -1,13 +1,17 @@
 import os
 
 from flask import Flask
+from config import app_config
 
 
-def create_app():
+def create_app(config_name=None):
     """Create and configure the app."""
     app = Flask(__name__,
                 instance_relative_config=True,
                 static_url_path='')
+
+    # app.config.from_object(app_config[config_name])
+
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY') or 'secret',
         SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL') or
@@ -32,13 +36,15 @@ def create_app():
 
     # register blueprints
     from app.controller import (
-        main, auth, user, category, thirdparty, item
+        # main, auth, user, category, thirdparty, item, api
+        api
     )
-    app.register_blueprint(main.bp)
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(user.bp)
-    app.register_blueprint(category.bp)
-    app.register_blueprint(thirdparty.bp)
-    app.register_blueprint(item.bp)
+    # app.register_blueprint(main.bp)
+    # app.register_blueprint(auth.bp)
+    # app.register_blueprint(user.bp)
+    # app.register_blueprint(category.bp)
+    # app.register_blueprint(thirdparty.bp)
+    # app.register_blueprint(item.bp)
+    app.register_blueprint(api.bp)
 
     return app
