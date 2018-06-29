@@ -12,7 +12,6 @@ Endpoints
     DELETE - /categories/<id> - remove a category with id number.
 
 """
-import re
 from flask import (
     jsonify, request)
 
@@ -27,13 +26,9 @@ def create_category():
     """Create new category."""
     data = request.get_json() or {}
 
-    error = check_category_data(data=data, new=True)
+    error = Category.check_data(data=data, new=True)
     if error:
         return bad_request(error)
-
-    # Check if unique attributes collide.
-    if Category.query.filter_by(name=data['name']).first():
-        return bad_request('please use a different name')
 
     # Create new instance and commit to database.
     category = Category()
@@ -70,7 +65,7 @@ def update_category(id: int):
 
     data = request.get_json() or {}
 
-    error = check_category_data(data=data)
+    error = Category.check_data(data=data)
     if error:
         return bad_request(error)
 
@@ -95,41 +90,3 @@ def delete_category(id: int):
     db.session.delete(category)
     db.session.commit()
     return '', 204
-
-
-def check_category_data(data: dict, new: bool = False) -> str or None:
-    """Verify Category data for correct keys and types."""
-    # Check if data is empty.
-    if len(data.keys()) == 0:
-        return 'empty request'
-    # Check if data contains any unexpected keys.
-    all_keys = ['name', 'description']
-    if any([key not in all_keys for key in data.keys()]):
-        return 'invalid attributes'
-
-    # Check if data contains all required keys for new category.
-    required_keys = ['name']
-    if new and any([key not in data.keys() for key in required_keys]):
-        return 'missing required attributes'
-
-    # Validate each present key.
-    if 'name' in data:
-        # Check for type.
-        if type(data['name']) is not str:
-            return 'name must be string'
-        # Check for expected regex pattern.
-        name = re.compile(r'\w+( \w+)*')
-        if re.fullmatch(name, data['name']) is None:
-            return 'invalid name'
-
-    if 'description' in data:
-        # Check for type.
-        if type(data['description']) is not str and \
-                data['description'] is not None:
-            return 'description must be string or null'
-        # Check for expected regex pattern.
-        # description = re.compile(r'')
-        # if re.fullmatch(description, data['description']) is None:
-        #     return 'invalid description'
-
-    return None
