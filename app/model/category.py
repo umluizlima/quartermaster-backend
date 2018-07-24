@@ -1,7 +1,17 @@
 """Data model for categories."""
 
-import re
 from app.model import db
+import app.controller.utils as utils
+
+
+definition = {
+    'types': {
+        'name': [str],
+        'description': [str, type(None)]
+    },
+    'required': ['name'],
+    'unique': ['name']
+}
 
 
 class Category(db.Model):
@@ -32,7 +42,7 @@ class Category(db.Model):
         }
         return obj
 
-    def from_dict(self, data: dict):
+    def from_dict(self, data: dict, new: bool = False):
         """Fill Category attributes from given dictionary."""
         for field in ['name', 'description']:
             if field in data:
@@ -41,40 +51,5 @@ class Category(db.Model):
     @staticmethod
     def check_data(data: dict, new: bool = False):
         """Verify Category data for correct keys and types."""
-        # Check if data is empty.
-        if len(data.keys()) == 0:
-            return 'empty request'
-        # Check if data contains any unexpected keys.
-        all_keys = ['name', 'description']
-        if any([key not in all_keys for key in data.keys()]):
-            return 'invalid attributes'
-
-        # Check if data contains all required keys for new category.
-        required_keys = ['name']
-        if new and any([key not in data.keys() for key in required_keys]):
-            return 'missing required attributes'
-
-        # Validate each present key.
-        if 'name' in data:
-            # Check for type.
-            if type(data['name']) is not str:
-                return 'name must be string'
-            # Check for expected regex pattern.
-            name = re.compile(r'\w+( \w+)*')
-            if re.fullmatch(name, data['name']) is None:
-                return 'invalid name'
-
-            if new and Category.query.filter_by(name=data['name']).first():
-                return 'please use a different name'
-
-        if 'description' in data:
-            # Check for type.
-            if type(data['description']) is not str and \
-                    data['description'] is not None:
-                return 'description must be string or null'
-            # Check for expected regex pattern.
-            # description = re.compile(r'')
-            # if re.fullmatch(description, data['description']) is None:
-            #     return 'invalid description'
-
-        return None
+        error = utils.check_data(data, definition, new)
+        return error
