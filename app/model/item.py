@@ -5,6 +5,20 @@ Every item has a registry, name, description and category.
 """
 
 from app.model import db
+import app.controller.utils as utils
+
+
+definition = {
+    'types': {
+        'registry': [str, type(None)],
+        'name': [str],
+        'description': [str, type(None)],
+        'available': [bool],
+        'category_id': [int, type(None)],
+    },
+    'required': ['name'],
+    'unique': ['registry']
+}
 
 
 class Item(db.Model):
@@ -40,3 +54,8 @@ class Item(db.Model):
                       'available']:
             if field in data:
                 setattr(self, field, data[field])
+
+    @staticmethod
+    def check_data(data: dict, new: bool = False):
+        error = utils.check_data(data, definition, new)
+        return error
