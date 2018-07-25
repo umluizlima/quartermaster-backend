@@ -37,7 +37,7 @@ def create_item():
         error = 'tombo já existe'
     if 'category_id' in data and data['category_id'] is not None and \
             Category.query.get(data['category_id']) is None:
-        error = 'category_id não existe'
+        error = 'categoria não existe'
     if error:
         return bad_request(error)
 

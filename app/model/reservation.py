@@ -4,9 +4,23 @@ Data model for reservations.
 Every reservation has a name, begin, and end dates.
 """
 
-import re
-from datetime import datetime
+from datetime import datetime as dt
 from app.model import db, User, Thirdparty
+import app.controller.utils as utils
+
+
+definition = {
+    'types': {
+        'name': [str],
+        'description': [str, type(None)],
+        'date_start': [str],
+        'date_end': [str],
+        'user_id': [int, type(None)],
+        'thirdparty_id': [int, type(None)]
+    },
+    'required': ['name', 'date_start', 'date_end'],
+    'unique': []
+}
 
 
 class Reservation(db.Model):
@@ -50,71 +64,12 @@ class Reservation(db.Model):
 
     @staticmethod
     def check_data(data: dict, new: bool = False):
-        """Verify Reservation data for correct keys and types."""
-        # Check if data is empty.
-        if len(data.keys()) == 0:
-            return 'empty request'
-        # Check if data contains any unexpected keys.
-        all_keys = ['name', 'description', 'date_start',
-                    'date_end', 'user_id', 'thirdparty_id']
-        if any([key not in all_keys for key in data.keys()]):
-            return 'invalid attributes'
-
-        # Check if data contains all required keys for new lending.
-        required_keys = ['name', 'date_start', 'date_end',
-                         'user_id', 'thirdparty_id']
-        if new and any([key not in data.keys() for key in required_keys]):
-            return 'missing required attributes'
-
-        # Validate each present key.
-        if 'name' in data:
-            # Check for type.
-            if type(data['name']) is not str:
-                return 'name must be string'
-            # Check for expected regex pattern.
-            name = re.compile(r'\w+( \w+)*')
-            if re.fullmatch(name, data['name']) is None:
-                return 'invalid name'
-
-        if 'description' in data:
-            # Check for type.
-            if type(data['description']) is not str and \
-                    data['description'] is not None:
-                return 'description must be string or null'
-            # Check for expected regex pattern.
-            # description = re.compile(r'')
-            # if re.fullmatch(description, data['description']) is None:
-            #     return 'invalid description'
-
-        # if 'available' in data:
-        #     # Check for type.
-        #     if type(data['available']) is not bool:
-        #         return 'available must be bool'
-        #
-        if 'user_id' in data:
-            # Check for type.
-            if type(data['user_id']) is not int and \
-                    data['user_id'] is not None:
-                return 'user id must be int or null'
-            # Check for existance.
-            if type(data['user_id']) is int and \
-                    User.query.get(data['user_id']) is None:
-                return 'invalid user_id'
-
-        if 'thirdparty_id' in data:
-            # Check for type.
-            if type(data['thirdparty_id']) is not int and \
-                    data['thirdparty_id'] is not None:
-                return 'thirdparty id must be int or null'
-            # Check for existance.
-            if type(data['thirdparty_id']) is int and \
-                    Thirdparty.query.get(data['thirdparty_id']) is None:
-                return 'invalid thirdparty_id'
-
-        # if 'registry' in data:
-        #     # Check for type.
-        #     if type(data['registry']) is not str and \
-        #             data['registry'] is not None:
-        #         return 'registry must be string or null'
-
-        return None
+        error = utils.check_data(data, definition, new) \
+            or utils.check_name(data, 'name') \
+            or utils.check_datetime(data, 'date_start') \
+            or utils.check_datetime(data, 'date_end')
+        if 'date_start' in data \
+                and 'date_end' in data \
+                and data['date_end'] <= data['date_start']:
+            error = 'date_start deve ser menor que date_end'
+        return error

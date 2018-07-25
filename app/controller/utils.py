@@ -45,7 +45,7 @@ def check_datetime(data: dict, key: str) -> Any:
         if re.fullmatch(datetime_regex, data[key]) is None:
             return f'campo {key} deve ter o formato aaaa-mm-ddThh:mm'
         try:
-            dt.strptime(data[key], '%Y-%m-%dT%H:%M')
+            data[key] = dt.strptime(data[key], '%Y-%m-%dT%H:%M')
         except ValueError:
             return f'campo {key} inválido'
     return None
