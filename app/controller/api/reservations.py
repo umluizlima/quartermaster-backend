@@ -58,7 +58,18 @@ def create_reservation():
 # Read
 @api.route('/reservations', methods=['GET'])
 @token_required
-def get_reservations():
+def get_open_reservations():
+    """Return list of reservations."""
+    return jsonify(
+        [reservation.to_dict() for reservation
+            in Reservation.query.filter(Reservation.date_start >= dt.utcnow())]
+    )
+
+
+# Read
+@api.route('/reservations/all', methods=['GET'])
+@token_required
+def get_all_reservations():
     """Return list of reservations."""
     return jsonify(
         [reservation.to_dict() for reservation in Reservation.query.all()]
