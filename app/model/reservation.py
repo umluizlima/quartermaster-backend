@@ -4,8 +4,7 @@ Data model for reservations.
 Every reservation has a name, begin, and end dates.
 """
 
-from datetime import datetime as dt
-from app.model import db, User, Thirdparty
+from app.model import db
 import app.controller.utils as utils
 
 

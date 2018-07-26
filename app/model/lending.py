@@ -4,8 +4,30 @@ Data model for lendings.
 Every lending has a name, begin, end and return dates.
 """
 
+from datetime import datetime as dt
 from app.model import db
-from datetime import datetime
+import app.controller.utils as utils
+
+# def format_datetime(string):
+#     return dt.strftime(string, '%Y-%m-%dT%H:%M')
+#
+#
+# def parse_datetime(datetime):
+#     return dt.strptime(datetime, '%Y-%m-%dT%H:%M')
+
+
+definition = {
+    'types': {
+        'date_start': [str],
+        'date_end': [str],
+        'date_return': [str, type(None)],
+        'item_id': [int, type(None)],
+        'user_id': [int, type(None)],
+        'thirdparty_id': [int, type(None)]
+    },
+    'required': ['date_start', 'date_end'],
+    'unique': []
+}
 
 
 class Lending(db.Model):
@@ -13,7 +35,7 @@ class Lending(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     date_start = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
+                           default=dt.utcnow)
     date_end = db.Column(db.DateTime, nullable=False)
     date_return = db.Column(db.DateTime, nullable=True)
     item_id = db.Column(db.Integer,
@@ -54,61 +76,16 @@ class Lending(db.Model):
 
     @staticmethod
     def check_data(data: dict, new: bool = False):
-        """Verify Lending data for correct keys and types."""
-        # Check if data is empty.
-        if len(data.keys()) == 0:
-            return 'empty request'
-        # Check if data contains any unexpected keys.
-        all_keys = ['date_start', 'date_end', 'date_return',
-                    'item_id', 'user_id', 'thirdparty_id']
-        if any([key not in all_keys for key in data.keys()]):
-            return 'invalid attributes'
-
-        # Check if data contains all required keys for new lending.
-        required_keys = ['date_start', 'date_end', 'item_id',
-                         'user_id', 'thirdparty_id']
-        if new and any([key not in data.keys() for key in required_keys]):
-            return 'missing required attributes'
-
-        # # Validate each present key.
-        # if 'date_start' in data:
-        #     # Check for type.
-        #     if type(data['name']) is not str:
-        #         return 'name must be string'
-        #     # Check for expected regex pattern.
-        #     name = re.compile(r'\w+( \w+)*')
-        #     if re.fullmatch(name, data['name']) is None:
-        #         return 'invalid name'
-        #
-        # if 'description' in data:
-        #     # Check for type.
-        #     if type(data['description']) is not str and \
-        #             data['description'] is not None:
-        #         return 'description must be string or null'
-        #     # Check for expected regex pattern.
-        #     # description = re.compile(r'')
-        #     # if re.fullmatch(description, data['description']) is None:
-        #     #     return 'invalid description'
-        #
-        # if 'available' in data:
-        #     # Check for type.
-        #     if type(data['available']) is not bool:
-        #         return 'available must be bool'
-        #
-        # if 'category_id' in data:
-        #     # Check for type.
-        #     if type(data['category_id']) is not int and \
-        #             data['category_id'] is not None:
-        #         return 'category id must be int or null'
-        #     # Check for existance.
-        #     if type(data['category_id']) is int and \
-        #             Category.query.get(data['category_id']) is None:
-        #         return 'invalid category_id'
-        #
-        # if 'registry' in data:
-        #     # Check for type.
-        #     if type(data['registry']) is not str and \
-        #             data['registry'] is not None:
-        #         return 'registry must be string or null'
-
-        return None
+        error = utils.check_data(data, definition, new) \
+            or utils.check_datetime(data, 'date_start') \
+            or utils.check_datetime(data, 'date_end') \
+            or utils.check_datetime(data, 'date_return')
+        if 'date_start' in data \
+                and 'date_end' in data \
+                and data['date_end'] <= data['date_start']:
+            error = 'date_start deve ser menor que date_end'
+        if 'date_start' in data \
+                and 'date_return' in data \
+                and data['date_return'] <= data['date_start']:
+            error = 'date_start deve ser menor que date_return'
+        return error

@@ -41,8 +41,6 @@ def create_reservation():
     if error:
         return bad_request(error)
 
-    print(data)
-
     reservation = Reservation()
     reservation.from_dict(data)
 
