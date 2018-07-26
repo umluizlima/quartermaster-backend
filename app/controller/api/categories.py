@@ -23,6 +23,7 @@ from app.controller.errors import (
     bad_request, internal_server, not_found
 )
 from app.controller.api import api
+from app.controller.api.auth import token_required
 
 
 # Create
@@ -52,6 +53,7 @@ def create_category():
 
 # Read
 @api.route('/categories', methods=['GET'])
+@token_required
 def get_categories():
     """Return list of categories."""
     return jsonify(
