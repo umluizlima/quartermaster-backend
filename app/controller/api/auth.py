@@ -3,7 +3,9 @@ from flask import (
     request, jsonify, g
 )
 from app.model import User
-from app.controller.errors import bad_request, unauthorized
+from app.controller.errors import (
+    bad_request, unauthorized
+)
 from app.controller.api import api
 
 
@@ -12,7 +14,21 @@ def token_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return unauthorized('token required')
+            return unauthorized('token necessário')
+
+        return view(**kwargs)
+
+    return wrapped_view
+
+
+def admin_required(view):
+    """Require user authentication."""
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return unauthorized('token necessário')
+        elif not g.user.admin:
+            return unauthorized('admin necessário')
 
         return view(**kwargs)
 
@@ -30,12 +46,12 @@ def login():
     user = User.query.filter_by(email=data['email']).first()
 
     if user is None:
-        return bad_request('invalid email address')
+        return bad_request('email incorreto')
     elif not user.check_password(data['password']):
-        return bad_request('incorrect password')
+        return bad_request('senha incorreta')
 
     response = {
-        'message': 'use this token as the Authentication header',
+        'message': 'use este token no cabeçalho Authentication',
         'token': user.get_token()
     }
     return jsonify(response), 200

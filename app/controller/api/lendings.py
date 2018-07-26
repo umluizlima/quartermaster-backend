@@ -23,10 +23,12 @@ from app.controller.errors import (
     bad_request, internal_server, not_found
 )
 from app.controller.api import api
+from app.controller.api.auth import token_required
 
 
 # Create
 @api.route('/lendings', methods=['POST'])
+@token_required
 def create_lending():
     """Create new lending."""
     data = request.get_json() or {}
@@ -61,6 +63,7 @@ def create_lending():
 
 # Read
 @api.route('/lendings', methods=['GET'])
+@token_required
 def get_lendings():
     """Return list of lendings."""
     return jsonify(
@@ -70,6 +73,7 @@ def get_lendings():
 
 # Read
 @api.route('/lendings/<int:id>', methods=['GET'])
+@token_required
 def get_lending(id: int):
     """Return lending with given id."""
     lending = Lending.query.filter_by(id=id).first()
@@ -80,6 +84,7 @@ def get_lending(id: int):
 
 # Update
 @api.route('/lendings/<int:id>', methods=['PUT'])
+@token_required
 def update_lending(id: int):
     """Update given lending, if exists."""
     lending = Lending.query.filter_by(id=id).first()
@@ -117,6 +122,7 @@ def update_lending(id: int):
 
 # Delete
 @api.route('/lendings/<int:id>', methods=['DELETE'])
+@token_required
 def delete_lending(id: int):
     """Delete given lending, if exists."""
     lending = Lending.query.filter_by(id=id).first()

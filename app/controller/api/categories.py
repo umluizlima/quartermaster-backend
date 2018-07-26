@@ -28,6 +28,7 @@ from app.controller.api.auth import token_required
 
 # Create
 @api.route('/categories', methods=['POST'])
+@token_required
 def create_category():
     """Create new category."""
     data = request.get_json() or {}
@@ -63,6 +64,7 @@ def get_categories():
 
 # Read
 @api.route('/categories/<int:id>', methods=['GET'])
+@token_required
 def get_category(id: int):
     """Return category with given id."""
     category = Category.query.filter_by(id=id).first()
@@ -73,6 +75,7 @@ def get_category(id: int):
 
 # Update
 @api.route('/categories/<int:id>', methods=['PUT'])
+@token_required
 def update_category(id: int):
     """Update given category, if exists."""
     category = Category.query.filter_by(id=id).first()

@@ -22,10 +22,12 @@ from app.controller.errors import (
     bad_request, internal_server, not_found
 )
 from app.controller.api import api
+from app.controller.api.auth import token_required
 
 
 # Create
 @api.route('/thirdparties', methods=['POST'])
+@token_required
 def create_thirdparty():
     """Create new thirdparty."""
     data = request.get_json() or {}
@@ -51,6 +53,7 @@ def create_thirdparty():
 
 # Read
 @api.route('/thirdparties', methods=['GET'])
+@token_required
 def get_thirdparties():
     """Return a JSON of all existing thirdparties."""
     return jsonify(
@@ -60,6 +63,7 @@ def get_thirdparties():
 
 # Read
 @api.route('/thirdparties/<int:id>', methods=['GET'])
+@token_required
 def get_thirdparty(id: int):
     """Return given thirdparty by id, if exists."""
     thirdparty = Thirdparty.query.filter_by(id=id).first()
@@ -70,6 +74,7 @@ def get_thirdparty(id: int):
 
 # Update
 @api.route('/thirdparties/<int:id>', methods=['PUT'])
+@token_required
 def update_thirdparty(id: int):
     """Update given thirdparty, if exists."""
     thirdparty = Thirdparty.query.filter_by(id=id).first()
@@ -96,6 +101,7 @@ def update_thirdparty(id: int):
 
 # Delete
 @api.route('/thirdparties/<int:id>', methods=['DELETE'])
+@token_required
 def delete_thirdparty(id: int):
     """Delete given thirdparty, if exists."""
     thirdparty = Thirdparty.query.filter_by(id=id).first()

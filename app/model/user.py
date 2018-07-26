@@ -6,8 +6,7 @@ A user might be admin.
 """
 
 import os
-import re
-import jwt
+from secrets import token_urlsafe
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.model import db
@@ -58,49 +57,29 @@ class User(db.Model):
     def get_token(self, expires_in=3600):
         """Get user's token, or generates a new one."""
         now = datetime.utcnow()
-        # Return current token if still valid
-        if self.token and self.token_exp \
-                and self.token_exp > now + timedelta(seconds=60):
+        # if self.token and self.token_exp \
+        #         and self.token_exp > now + timedelta(seconds=60):
+        #     return self.token
+        if self.token:
             return self.token
-        # Generate a new token
-        payload = {
-            'user_id': self.id,
-            'admin': self.admin
-        }
-        self.token = jwt.encode(payload,
-                                os.environ.get('SECRET_KEY') or 'secret')
+        self.token = token_urlsafe(32)
         self.token_exp = now + timedelta(seconds=expires_in)
-        db.session.add(self)
-        return self.token.decode('UTF-8')
+        db.session.commit()
+        return self.token
 
     def revoke_token(self):
         """Instantly revokes user's current token."""
+        self.token = None
         self.token_exp = datetime.utcnow() - timedelta(seconds=1)
+        db.session.commit()
 
     @staticmethod
     def check_token(token):
         """Return user whom token belongs to."""
-        print(token)
-        try:
-            payload = jwt.decode(
-                token,
-                os.environ.get('SECRET_KEY') or 'secret'
-            )
-        except Exception:
-            return None
-        print(payload)
-        user = User.query.filter_by(id=payload['user_id']).first()
-        print(user)
-        print(user.to_dict())
-        print(user.password)
-        print(user.token_exp)
-        # if user is None or user.token_exp is None \
-        #         or user.token_exp < datetime.utcnow():
-        #     return None
-        if user is None:
-            return None
-        print('validou o token')
-        return user
+        user = User.query.filter_by(token=token).first()
+        if user and user.token == token:
+            return user
+        return None
 
     def to_dict(self):
         """Return a User object formatted as dict."""
@@ -109,7 +88,8 @@ class User(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "admin": self.admin
+            "admin": self.admin,
+            "token": self.token
         }
         return obj
 

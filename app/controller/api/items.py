@@ -23,10 +23,12 @@ from app.controller.errors import (
     bad_request, internal_server, not_found
 )
 from app.controller.api import api
+from app.controller.api.auth import token_required
 
 
 # Create
 @api.route('/items', methods=['POST'])
+@token_required
 def create_item():
     """Create new item."""
     data = request.get_json() or {}
@@ -55,6 +57,7 @@ def create_item():
 
 # Read
 @api.route('/items', methods=['GET'])
+@token_required
 def get_items():
     """Return list of items."""
     return jsonify(
@@ -64,6 +67,7 @@ def get_items():
 
 # Read
 @api.route('/items/<int:id>', methods=['GET'])
+@token_required
 def get_item(id: int):
     """Return item with given id."""
     item = Item.query.filter_by(id=id).first()
@@ -74,6 +78,7 @@ def get_item(id: int):
 
 # Update
 @api.route('/items/<int:id>', methods=['PUT'])
+@token_required
 def update_item(id: int):
     """Update given item, if exists."""
     item = Item.query.filter_by(id=id).first()
@@ -104,6 +109,7 @@ def update_item(id: int):
 
 # Delete
 @api.route('/items/<int:id>', methods=['DELETE'])
+@token_required
 def delete_item(id: int):
     """Delete given item, if exists."""
     item = Item.query.filter_by(id=id).first()

@@ -8,10 +8,14 @@ from app.controller.errors import (
     bad_request, internal_server, not_found
 )
 from app.controller.api import api
+from app.controller.api.auth import (
+    admin_required, token_required
+)
 
 
 # Create
 @api.route('/users', methods=['POST'])
+@admin_required
 def create_user():
     """Create new user."""
     data = request.get_json() or {}
@@ -36,6 +40,7 @@ def create_user():
 
 
 @api.route('/users', methods=['GET'])
+@token_required
 def get_users():
     """Return a JSON of all existing Users."""
     return jsonify(
@@ -44,6 +49,7 @@ def get_users():
 
 
 @api.route('/users/<int:id>', methods=['GET'])
+@token_required
 def get_user(id):
     """Return given user by id, if exists."""
     user = User.query.filter_by(id=id).first()
@@ -53,6 +59,7 @@ def get_user(id):
 
 
 @api.route('/users/<int:id>', methods=['PUT'])
+@admin_required
 def update_user(id):
     """Update given user, if exists."""
     user = User.query.filter_by(id=id).first()
@@ -77,6 +84,7 @@ def update_user(id):
 
 
 @api.route('/users/<int:id>', methods=['DELETE'])
+@admin_required
 def delete_user(id):
     """Delete given user, if exists."""
     user = User.query.filter_by(id=id).first()
