@@ -64,7 +64,18 @@ def create_lending():
 # Read
 @api.route('/lendings', methods=['GET'])
 @token_required
-def get_lendings():
+def get_open_lendings():
+    """Return list of lendings."""
+    return jsonify(
+        [lending.to_dict() for lending
+            in Lending.query.filter(Lending.date_return == None)]
+    )
+
+
+# Read
+@api.route('/lendings/all', methods=['GET'])
+@token_required
+def get_all_lendings():
     """Return list of lendings."""
     return jsonify(
         [lending.to_dict() for lending in Lending.query.all()]
