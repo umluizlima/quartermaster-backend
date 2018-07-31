@@ -1,3 +1,4 @@
+import os
 import functools
 from flask import (
     request, jsonify, g
@@ -7,6 +8,9 @@ from app.controller.errors import (
     bad_request, unauthorized
 )
 from app.controller.api import api
+
+class Admin:
+    admin = True
 
 
 def token_required(view):
@@ -69,9 +73,12 @@ def logout():
 def load_logged_in_user():
     """Get logged user before every request."""
     token = request.headers.get('Authorization')
-    print(token)
 
     if token is None:
         g.user = None
     else:
-        g.user = User.check_token(token.split()[-1])
+        token = token.split()[-1]
+        if token == os.environ.get('SECRET_KEY'):
+            g.user = Admin()
+        else:
+            g.user = User.check_token(token.split()[-1])

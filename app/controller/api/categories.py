@@ -102,6 +102,7 @@ def update_category(id: int):
 
 # Delete
 @api.route('/categories/<int:id>', methods=['DELETE'])
+@token_required
 def delete_category(id: int):
     """Delete given category, if exists."""
     category = Category.query.filter_by(id=id).first()
