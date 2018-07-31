@@ -1,6 +1,6 @@
 import os
-
 from flask import Flask
+from flask_cors import CORS
 
 
 def create_app():
@@ -25,6 +25,8 @@ def create_app():
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    CORS(app)
 
     from flask_sslify import SSLify
     if 'DYNO' in os.environ:  # only trigger SSLify if app is running on Heroku

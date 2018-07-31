@@ -13,6 +13,7 @@ gunicorn = "*"
 "psycopg2" = "*"
 flask-sslify = "*"
 pyjwt = "*"
+flask-cors = "*"
 
 [dev-packages]
 
