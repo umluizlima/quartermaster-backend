@@ -6,6 +6,7 @@ A user might be admin.
 """
 
 import os
+import jwt
 from secrets import token_urlsafe
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -62,7 +63,17 @@ class User(db.Model):
         #     return self.token
         if self.token:
             return self.token
-        self.token = token_urlsafe(32)
+        payload = {
+            'user_id': self.id,
+            'admin': self.admin
+        }
+        # self.token = token_urlsafe(32)
+        self.token = jwt.encode(
+            payload,
+            os.environ.get('SECRET_KEY'),
+            algorithm='HS256'
+        ).decode('utf-8')
+        print(self.token)
         self.token_exp = now + timedelta(seconds=expires_in)
         db.session.commit()
         return self.token
