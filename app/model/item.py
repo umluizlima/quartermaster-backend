@@ -43,7 +43,7 @@ class Item(db.Model):
             "registry": self.registry,
             "name": self.name,
             "description": self.description,
-            "avaliable": self.available,
+            "available": self.available,
             "category_id": self.category_id
         }
         return obj
