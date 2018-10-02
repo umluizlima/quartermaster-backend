@@ -111,7 +111,8 @@ def update_lending(id: int):
     if 'thirdparty_id' in data and data['thirdparty_id'] is not None and \
             Thirdparty.query.get(data['thirdparty_id']) is None:
         error = 'terceiro não existe'
-    if 'item_id' in data and data['item_id'] is not None:
+    if 'item_id' in data and data['item_id'] != lending.item_id and \
+            data['item_id'] is not None:
         item = Item.query.get(data['item_id'])
         if item is None:
             error = 'item não existe'

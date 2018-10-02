@@ -90,6 +90,7 @@ class Lending(db.Model):
             error = 'date_start deve ser menor que date_end'
         if 'date_start' in data \
                 and 'date_return' in data \
+                and data['date_return'] is not None \
                 and data['date_return'] <= data['date_start']:
             error = 'date_start deve ser menor que date_return'
         return error
