@@ -59,12 +59,16 @@ class Lending(db.Model):
         obj = {
             "id": self.id,
             "item_id": self.item_id,
-            "date_start": self.date_start,
-            "date_end": self.date_end,
+            "date_start": self.date_start.isoformat(timespec='minutes'),
+            "date_end": self.date_end.isoformat(timespec='minutes'),
             "date_return": self.date_return,
             "user_id": self.user_id,
             "thirdparty_id": self.thirdparty_id
         }
+        if self.date_return:
+            obj['date_return'] = self.date_return.isoformat(timespec='minutes')
+        else:
+            obj['date_return'] = None
         return obj
 
     def from_dict(self, data):
