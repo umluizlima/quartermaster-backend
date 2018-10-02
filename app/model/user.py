@@ -106,11 +106,9 @@ class User(db.Model):
 
     def from_dict(self, data, new_user=False):
         """Fill User attributes from given dictionary."""
-        for field in ['first_name', 'last_name', 'email']:
+        for field in ['first_name', 'last_name', 'email', 'admin']:
             if field in data:
                 setattr(self, field, data[field])
-        if 'admin' in data and bool(data['admin']) is True:
-            setattr(self, 'admin', True)
         if new_user and 'password' in data:
             self.set_password(data['password'])
 
