@@ -47,11 +47,12 @@ class Reservation(db.Model):
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "date_start": self.date_start,
-            "date_end": self.date_end,
+            "date_start": self.date_start.isoformat(timespec='minutes'),
+            "date_end": self.date_end.isoformat(timespec='minutes'),
             "user_id": self.user_id,
             "thirdparty_id": self.thirdparty_id
         }
+        print(type(self.date_start))
         return obj
 
     def from_dict(self, data):
