@@ -56,7 +56,8 @@ def login():
 
     response = {
         'message': 'use este token no cabeçalho Authentication',
-        'token': user.get_token()
+        'token': user.get_token(),
+        'id': user.id
     }
     return jsonify(response), 200
 
