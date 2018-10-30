@@ -24,7 +24,7 @@ definition = {
         'admin': [bool],
         'token': [str, type(None)]
     },
-    'required': ['first_name', 'last_name', 'email', 'password', 'confirm'],
+    'required': ['first_name', 'last_name', 'email'],
     'unique': ['email', 'token']
 }
 
@@ -50,6 +50,7 @@ class User(db.Model):
     def set_password(self, password):
         """Set user password."""
         self.password = generate_password_hash(password)
+        db.session.commit()
 
     def check_password(self, password):
         """Check if user password matches given password."""
@@ -58,22 +59,13 @@ class User(db.Model):
     def get_token(self, expires_in=3600):
         """Get user's token, or generates a new one."""
         now = datetime.utcnow()
-        # if self.token and self.token_exp \
-        #         and self.token_exp > now + timedelta(seconds=60):
-        #     return self.token
-        if self.token:
+
+        if self.token and self.token_exp \
+                and self.token_exp > now + timedelta(seconds=60):
             return self.token
-        payload = {
-            'user_id': self.id,
-            'admin': self.admin
-        }
-        # self.token = token_urlsafe(32)
-        self.token = jwt.encode(
-            payload,
-            os.environ.get('SECRET_KEY'),
-            algorithm='HS256'
-        ).decode('utf-8')
-        print(self.token)
+
+        self.token = token_urlsafe(32)
+
         self.token_exp = now + timedelta(seconds=expires_in)
         db.session.commit()
         return self.token
@@ -99,8 +91,7 @@ class User(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "admin": self.admin,
-            "token": self.token
+            "admin": self.admin
         }
         return obj
 
@@ -109,8 +100,10 @@ class User(db.Model):
         for field in ['first_name', 'last_name', 'email', 'admin']:
             if field in data:
                 setattr(self, field, data[field])
-        if new_user and 'password' in data:
-            self.set_password(data['password'])
+        # if new_user and 'password' in data:
+        #     self.set_password(data['password'])
+        if new_user:
+            self.set_password('abcdef')
 
     @staticmethod
     def check_data(data: dict, new: bool = False):
@@ -118,9 +111,9 @@ class User(db.Model):
             or utils.check_name(data, 'first_name') \
             or utils.check_name(data, 'last_name') \
             or utils.check_email(data, 'email')
-        if new:
-            if 'password' in data and 'confirm' in data:
-                if data['password'] != data['confirm']:
-                    return 'password e confirm devem ser iguais'
+        # if new:
+        #     if 'password' in data and 'confirm' in data:
+        #         if data['password'] != data['confirm']:
+        #             return 'password e confirm devem ser iguais'
 
         return error

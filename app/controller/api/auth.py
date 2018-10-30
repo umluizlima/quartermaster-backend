@@ -9,6 +9,7 @@ from app.controller.errors import (
 )
 from app.controller.api import api
 
+
 class Admin:
     admin = True
 
@@ -60,6 +61,29 @@ def login():
         'id': user.id
     }
     return jsonify(response), 200
+
+
+@api.route('/changepassword', methods=['PUT'])
+@token_required
+def change_password():
+    """Validate user's credentials."""
+    data = request.get_json() or {}
+
+    if 'old_password' not in data \
+            or 'new_password' not in data \
+            or 'new_confirm' not in data:
+        return bad_request('missing fields')
+
+    if g.user is None:
+        return bad_request('é necessário estar logado')
+    elif not g.user.check_password(data['old_password']):
+        return bad_request('senha incorreta')
+    elif data['new_password'] != data['new_confirm']:
+        return bad_request('nova senha e confirmação devem ser iguais')
+
+    g.user.set_password(data['new_password'])
+
+    return '', 204
 
 
 @api.route('/logout', methods=['GET'])
