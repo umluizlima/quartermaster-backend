@@ -58,8 +58,18 @@ def create_item():
 # Read
 @api.route('/items', methods=['GET'])
 @token_required
-def get_items():
-    """Return list of items."""
+def get_available_items():
+    """Return list of available items."""
+    return jsonify(
+        [item.to_dict() for item in Item.query.filter(Item.available)]
+    )
+
+
+# Read
+@api.route('/items/all', methods=['GET'])
+@token_required
+def get_all_items():
+    """Return list of all items."""
     return jsonify(
         [item.to_dict() for item in Item.query.all()]
     )
