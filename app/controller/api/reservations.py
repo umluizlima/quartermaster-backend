@@ -62,7 +62,7 @@ def get_open_reservations():
     """Return list of reservations."""
     return jsonify(
         [reservation.to_dict() for reservation
-            in Reservation.query.filter(Reservation.date_start >= dt.utcnow())]
+            in Reservation.query.filter(Reservation.date_end >= dt.utcnow())]
     )
 
 
