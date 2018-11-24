@@ -40,6 +40,17 @@ def create_reservation():
     if 'thirdparty_id' in data and data['thirdparty_id'] is not None and \
             Thirdparty.query.get(data['thirdparty_id']) is None:
         error = 'terceiro não existe'
+    if Reservation.query.filter(
+                Reservation.date_start >= data['date_start']
+            ).filter(
+                Reservation.date_start <= data['date_end']
+            ).all() or Reservation.query.filter(
+                Reservation.date_end >= data['date_start']
+            ).filter(
+                Reservation.date_end <= data['date_end']
+            ).all():
+        error = 'já existe um evento nesse período'
+
     if error:
         return bad_request(error)
 
@@ -104,6 +115,17 @@ def update_reservation(id: int):
     if 'thirdparty_id' in data and data['thirdparty_id'] is not None and \
             Thirdparty.query.get(data['thirdparty_id']) is None:
         error = 'terceiro não existe'
+    if Reservation.query.filter(
+                Reservation.date_start >= data['date_start']
+            ).filter(
+                Reservation.date_start <= data['date_end']
+            ).all() or Reservation.query.filter(
+                Reservation.date_end >= data['date_start']
+            ).filter(
+                Reservation.date_end <= data['date_end']
+            ).all():
+        error = 'já existe um evento nesse período'
+
     if error:
         return bad_request(error)
 
