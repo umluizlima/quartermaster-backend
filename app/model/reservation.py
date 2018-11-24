@@ -65,7 +65,6 @@ class Reservation(db.Model):
     @staticmethod
     def check_data(data: dict, new: bool = False):
         error = utils.check_data(data, definition, new) \
-            or utils.check_name(data, 'name') \
             or utils.check_datetime(data, 'date_start') \
             or utils.check_datetime(data, 'date_end')
         if 'date_start' in data \
