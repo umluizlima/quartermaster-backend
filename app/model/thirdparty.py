@@ -13,6 +13,7 @@ definition = {
         'first_name': [str],
         'last_name': [str],
         'email': [str],
+        'phone': [str]
     },
     'required': ['first_name', 'last_name', 'email'],
     'unique': ['email']
@@ -26,6 +27,7 @@ class Thirdparty(db.Model):
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(15))
     reservations = db.relationship(
         'Reservation',
         backref='thirdparty',
@@ -43,13 +45,14 @@ class Thirdparty(db.Model):
             "id": self.id,
             "first_name": self.first_name,
             "last_name": self.last_name,
-            "email": self.email
+            "email": self.email,
+            "phone": self.phone
         }
         return obj
 
     def from_dict(self, data):
         """Fill Thirdparty attributes from given dictionary."""
-        for field in ['first_name', 'last_name', 'email']:
+        for field in ['first_name', 'last_name', 'email', 'phone']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -58,5 +61,6 @@ class Thirdparty(db.Model):
         error = utils.check_data(data, definition, new) \
             or utils.check_name(data, 'first_name') \
             or utils.check_name(data, 'last_name') \
-            or utils.check_email(data, 'email')
+            or utils.check_email(data, 'email') \
+            or utils.check_phone(data, 'phone')
         return error
