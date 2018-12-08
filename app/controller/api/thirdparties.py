@@ -27,7 +27,6 @@ from app.controller.api.auth import token_required
 
 # Create
 @api.route('/thirdparties', methods=['POST'])
-@token_required
 def create_thirdparty():
     """Create new thirdparty."""
     data = request.get_json() or {}
