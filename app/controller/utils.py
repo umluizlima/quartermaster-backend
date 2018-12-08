@@ -51,6 +51,17 @@ def check_datetime(data: dict, key: str) -> Any:
     return None
 
 
+def check_phone(data: dict, key: str) -> Any:
+    """Verifica se o valor na chave atende o padrão de telefone."""
+    if key in data and type(data[key]) == str:
+        phone_regex = re.compile(
+            r'(^(\+?[1-9]{1}[0-9]*)?([ -]*[0-9 ]*)+$)'
+        )
+        if re.fullmatch(phone_regex, data[key]) is None:
+            return f'campo {key} inválido'
+    return None
+
+
 def check_data(
     data: dict,
     definition: dict,
