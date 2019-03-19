@@ -6,9 +6,9 @@ desenvolvida durante uma Iniciação Científica.
 
 ## Desenvolvimento local
 
-Os seguintes comandos preparam o ambiente para desenvolvimento local:
+Os seguintes comandos preparam o ambiente para desenvolvimento local (necessário Python 3.7):
 ```sh
-> git clone https://github.com/umluizlima/quartermaster-backend
+> git clone https://github.com/umluizlima/quartermaster-backend.git
 > cd quartermaster-backend
 > pipenv install
 ```
@@ -34,4 +34,4 @@ crie uma conta gratuita, caso não possua). Siga as seguintes instruções para 
 
 Em sua primeira publicação a aplicação não contém nenhum usuário cadastrado. É preciso criar um com privilégios administrativos para que as próximas interações possam ser feitas exclusivamente pela interface de [frontend](https://github.com/umluizlima/quartermaster-frontend). As instruções a seguir mostram como fazê-lo:
 
-1. 
+1.
