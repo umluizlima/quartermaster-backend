@@ -68,7 +68,6 @@ def create_reservation():
 
 # Read
 @api.route('/reservations', methods=['GET'])
-@token_required
 def get_open_reservations():
     """Return list of reservations."""
     return jsonify(
