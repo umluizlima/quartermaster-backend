@@ -14,5 +14,8 @@
         "version": "9.5"
       }
     }
-  ]
+  ],
+  "scripts": {
+    "postdeploy": "echo $SECRET_KEY"
+  }
 }
