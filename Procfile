@@ -1,1 +1,1 @@
-web: gunicorn "app:create_app()" --log-file=-
+web: flask db upgrade; gunicorn "app:create_app()" --log-file=-
