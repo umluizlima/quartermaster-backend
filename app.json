@@ -5,7 +5,7 @@
     "SECRET_KEY": {
       "description": "A secret key for verifying the integrity of signed cookies.",
       "generator": "secret"
-    },
+    }
   },
   "addons": [
     {
@@ -14,5 +14,5 @@
         "version": "9.5"
       }
     }
-  ],
+  ]
 }
