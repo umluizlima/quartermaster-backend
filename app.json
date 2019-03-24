@@ -16,6 +16,6 @@
     }
   ],
   "scripts": {
-    "postdeploy": "echo $SECRET_KEY"
+    "postdeploy": "flask create_admin"
   }
 }
