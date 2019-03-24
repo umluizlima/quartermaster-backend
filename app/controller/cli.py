@@ -11,7 +11,7 @@ def create_admin():
         'last_name': 'Admin',
         'email': 'admin@admin.com',
         'admin': True
-    })
+    }, new_user=True)
     try:
         db.session.add(user)
         db.session.commit()
