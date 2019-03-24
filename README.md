@@ -26,6 +26,7 @@ Os arquivos `Procfile` e `app.json` contidos na raiz deste projeto servem para p
 1. Clique no botão abaixo para configurar automaticamente a aplicação no Heroku.
 
   [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 2. Você pode escolher um nome específico no campo `App name` ou deixá-lo em branco para gerar um nome aleatório. Clique em `deploy app` para prosseguir com a publicação.
 
 Pronto! Sua instância do quartermaster-backend está criada e rodando no Heroku.
