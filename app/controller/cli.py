@@ -1,9 +1,11 @@
 import click
+from flask.cli import with_appcontext
 from app.model import (
     db, User
 )
 
 @click.command('create_admin')
+@with_appcontext
 def create_admin():
     user = User()
     user.from_dict({
