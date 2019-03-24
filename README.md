@@ -29,4 +29,10 @@ Os arquivos `Procfile` e `app.json` contidos na raiz deste projeto servem para p
 
 2. Você pode escolher um nome específico no campo `App name` ou deixá-lo em branco para gerar um nome aleatório. Clique em `deploy app` para prosseguir com a publicação.
 
-Pronto! Sua instância do quartermaster-backend está criada e rodando no Heroku.
+3. Caso o deploy seja bem sucedido a tela ficará como na imagem a seguir. Clique no botão `View` e copie o endereço da aplicação. Você precisará dele para publicar o frontend do Quartermaster.
+
+  ![heroku-deploy-success - Copia](https://user-images.githubusercontent.com/9170476/54882473-1097d880-4e39-11e9-8332-f84e8966987e.PNG)
+
+4. Durante o deploy é criado um perfil de Administrador para facilitar seu primeiro acesso. As informações de login são e-mail ` admin@admin.com ` e senha `abcdef`.
+
+5. Você está quase lá! Prossiga para a publicação do [frontend](http://github.com/umluizlima/quartermaster-frontend).
