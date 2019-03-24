@@ -8,30 +8,24 @@ desenvolvida durante uma Iniciação Científica.
 
 Os seguintes comandos preparam o ambiente para desenvolvimento local (necessário Python 3.7):
 ```sh
-> git clone https://github.com/umluizlima/quartermaster-backend.git
-> cd quartermaster-backend
-> pipenv install
+git clone https://github.com/umluizlima/quartermaster-backend.git
+cd quartermaster-backend
+pipenv install
 ```
 
 Para rodar a aplicação de forma local é útil ativar o modo de desenvolvimento, que habilita informações mais detalhadas de debug e hot reload:
 ```sh
-> export FLASK_ENV=development
-> pipenv run flask run
+export FLASK_ENV=development
+pipenv run flask run
 ```
 
 ## Publicação
 
-O arquivo `Procfile` contido na raiz deste projeto serve para publicar a aplicação de maneira fácil na plataforma [Heroku](https://heroku.com) (será preciso que você
-crie uma conta gratuita, caso não possua). Siga as seguintes instruções para publicar sua própria instância:
+Os arquivos `Procfile` e `app.json` contidos na raiz deste projeto servem para publicar a aplicação de maneira fácil na plataforma [Heroku](https://heroku.com) (será preciso que você crie uma conta gratuita, caso não possua). Siga as seguintes instruções para publicar sua própria instância:
 
-1. Acesse sua conta no Heroku;
-2. No dashboard, clique em `Create new app` (no dropdown `New`);
-3. Você pode definir um nome para a aplicação (o link de acesso da aplicação será `https://<nome-da-aplicação>.herokuapp.com/`) ou deixar o campo em branco para que seja usado um valor aleatório. Ignore outros campos e clique em `Create App`;
-4. Na tela da aplicação (que agora estará listada em seu dashboard), vá na aba `Resources` e digite `Postgres` em sua barra de pesquisa. Isto fará com que a opção `Heroku Postgres` seja listada. Clique nela e então no botão `Provision` dentro da dialog que aparece (confira que o plano selecionado é o grátis `Hobby Dev - Free`);
-5.
+1. Clique no botão abaixo para configurar automaticamente a aplicação no Heroku.
 
-## Utilização
+  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+2. Você pode escolher um nome específico no campo `App name` ou deixá-lo em branco para gerar um nome aleatório. Clique em `deploy app` para prosseguir com a publicação.
 
-Em sua primeira publicação a aplicação não contém nenhum usuário cadastrado. É preciso criar um com privilégios administrativos para que as próximas interações possam ser feitas exclusivamente pela interface de [frontend](https://github.com/umluizlima/quartermaster-frontend). As instruções a seguir mostram como fazê-lo:
-
-1.
+Pronto! Sua instância do quartermaster-backend está criada e rodando no Heroku.
