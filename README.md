@@ -29,7 +29,7 @@ Os arquivos `Procfile` e `app.json` contidos na raiz deste projeto servem para p
 
 2. Você pode escolher um nome específico no campo `App name` ou deixá-lo em branco para gerar um nome aleatório. Clique em `deploy app` para prosseguir com a publicação.
 
-3. Caso o deploy seja bem sucedido a tela ficará como na imagem a seguir. Clique no botão `View` e copie o endereço da aplicação. Você precisará dele para publicar o frontend do Quartermaster.
+3. Caso o deploy seja bem sucedido a tela ficará como na imagem a seguir. Clique com o botão direito do mouse em `View`\* e copie o endereço da aplicação. Você precisará dele para publicar o frontend do Quartermaster. *** não existe uma página mapeada para este endereço **
 
   ![heroku-deploy-success - Copia](https://user-images.githubusercontent.com/9170476/54882473-1097d880-4e39-11e9-8332-f84e8966987e.PNG)
 
