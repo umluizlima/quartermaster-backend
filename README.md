@@ -1,6 +1,8 @@
 # Quartermaster (backend)
 > Uma aplicação administrativa para o laboratório CDG Hub do Inatel.
 
+![Skyfall - 007 and Quartermaster at museum](https://user-images.githubusercontent.com/9170476/57023159-b3e1c780-6c07-11e9-83fe-a396a0f1e29b.PNG)
+
 Este repositório contém a aplicação web de backend para a solução Quartermaster,
 desenvolvida durante uma Iniciação Científica.
 
