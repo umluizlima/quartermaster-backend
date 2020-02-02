@@ -4,11 +4,11 @@ from flask import (
 from app.models import (
     db, User
 )
-from app.controller.errors import (
+from app.api.errors import (
     bad_request, internal_server, not_found
 )
-from app.controller.api import api
-from app.controller.api.auth import (
+from app.api import api
+from app.api.controllers.auth import (
     admin_required, token_required
 )
 

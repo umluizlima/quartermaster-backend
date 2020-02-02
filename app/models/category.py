@@ -1,5 +1,5 @@
 from app.models import db
-import app.controller.utils as utils
+import app.models.utils as utils
 
 
 definition = {

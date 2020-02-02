@@ -38,11 +38,11 @@ def create_app():
     migrate.init_app(app, db)
 
     # register cli
-    from app.controller.cli import create_admin
+    from app.cli import create_admin
     app.cli.add_command(create_admin)
 
     # register blueprints
-    from app.controller.api import api
+    from app.api import api
     app.register_blueprint(api)
 
     return app

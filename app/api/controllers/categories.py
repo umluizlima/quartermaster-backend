@@ -19,11 +19,11 @@ from flask import (
 from app.models import (
     db, Category
 )
-from app.controller.errors import (
+from app.api.errors import (
     bad_request, internal_server, not_found
 )
-from app.controller.api import api
-from app.controller.api.auth import token_required
+from app.api import api
+from app.api.controllers.auth import token_required
 
 
 # Create

@@ -4,10 +4,10 @@ from flask import (
     request, jsonify, g
 )
 from app.models import User
-from app.controller.errors import (
+from app.api.errors import (
     bad_request, unauthorized
 )
-from app.controller.api import api
+from app.api import api
 
 
 class Admin:

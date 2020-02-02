@@ -4,7 +4,7 @@ from secrets import token_urlsafe
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import db
-import app.controller.utils as utils
+import app.models.utils as utils
 
 
 definition = {
