@@ -15,7 +15,7 @@ Endpoints
 from flask import (
     jsonify, request
 )
-from app.model import (
+from app.models import (
     db, Thirdparty
 )
 from app.controller.errors import (

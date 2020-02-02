@@ -33,7 +33,7 @@ def create_app():
         sslify = SSLify(app)
 
     # initialize database
-    from app.model import db, migrate
+    from app.models import db, migrate
     db.init_app(app)
     migrate.init_app(app, db)
 

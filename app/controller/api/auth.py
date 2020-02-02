@@ -3,7 +3,7 @@ import functools
 from flask import (
     request, jsonify, g
 )
-from app.model import User
+from app.models import User
 from app.controller.errors import (
     bad_request, unauthorized
 )

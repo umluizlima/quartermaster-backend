@@ -3,7 +3,7 @@ import jwt
 from secrets import token_urlsafe
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.model import db
+from app.models import db
 import app.controller.utils as utils
 
 
