@@ -1,9 +1,3 @@
-"""
-Data model for reservations.
-
-Every reservation has a name, begin, and end dates.
-"""
-
 from app.model import db
 import app.controller.utils as utils
 
@@ -23,8 +17,6 @@ definition = {
 
 
 class Reservation(db.Model):
-    """Data model for reservations."""
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text)
@@ -42,7 +34,6 @@ class Reservation(db.Model):
                               nullable=True)
 
     def to_dict(self):
-        """Return a Reservation object formatted as dict."""
         obj = {
             "id": self.id,
             "name": self.name,
@@ -56,7 +47,6 @@ class Reservation(db.Model):
         return obj
 
     def from_dict(self, data):
-        """Fill Reservation attributes from given dictionary."""
         for field in ['name', 'description', 'date_start', 'date_end',
                       'user_id', 'thirdparty_id']:
             if field in data:

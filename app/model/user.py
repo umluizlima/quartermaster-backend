@@ -1,10 +1,3 @@
-"""
-Data model for users.
-
-Every user has a firstname, lastname, email and password.
-A user might be admin.
-"""
-
 import os
 import jwt
 from secrets import token_urlsafe
@@ -30,8 +23,6 @@ definition = {
 
 
 class User(db.Model):
-    """Data model for users."""
-
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
@@ -48,16 +39,13 @@ class User(db.Model):
                                lazy=True)
 
     def set_password(self, password):
-        """Set user password."""
         self.password = generate_password_hash(password)
         db.session.commit()
 
     def check_password(self, password):
-        """Check if user password matches given password."""
         return check_password_hash(self.password, password)
 
     def get_token(self, expires_in=3600):
-        """Get user's token, or generates a new one."""
         now = datetime.utcnow()
 
         if self.token and self.token_exp \
@@ -71,21 +59,18 @@ class User(db.Model):
         return self.token
 
     def revoke_token(self):
-        """Instantly revokes user's current token."""
         self.token = None
         self.token_exp = datetime.utcnow() - timedelta(seconds=1)
         db.session.commit()
 
     @staticmethod
     def check_token(token):
-        """Return user whom token belongs to."""
         user = User.query.filter_by(token=token).first()
         if user and user.token == token:
             return user
         return None
 
     def to_dict(self):
-        """Return a User object formatted as dict."""
         obj = {
             "id": self.id,
             "first_name": self.first_name,
@@ -96,12 +81,9 @@ class User(db.Model):
         return obj
 
     def from_dict(self, data, new_user=False):
-        """Fill User attributes from given dictionary."""
         for field in ['first_name', 'last_name', 'email', 'admin']:
             if field in data:
                 setattr(self, field, data[field])
-        # if new_user and 'password' in data:
-        #     self.set_password(data['password'])
         if new_user:
             self.set_password('abcdef')
 
@@ -111,9 +93,5 @@ class User(db.Model):
             or utils.check_name(data, 'first_name') \
             or utils.check_name(data, 'last_name') \
             or utils.check_email(data, 'email')
-        # if new:
-        #     if 'password' in data and 'confirm' in data:
-        #         if data['password'] != data['confirm']:
-        #             return 'password e confirm devem ser iguais'
 
         return error

@@ -1,9 +1,3 @@
-"""Data model for thirdparties.
-
-This module declares the Thirdparty class and its attributes.
-
-"""
-
 from app.model import db
 import app.controller.utils as utils
 
@@ -21,8 +15,6 @@ definition = {
 
 
 class Thirdparty(db.Model):
-    """Data model for thirdparties."""
-
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
@@ -40,7 +32,6 @@ class Thirdparty(db.Model):
     )
 
     def to_dict(self):
-        """Return a Thirdparty object formatted as dict."""
         obj = {
             "id": self.id,
             "first_name": self.first_name,
@@ -51,7 +42,6 @@ class Thirdparty(db.Model):
         return obj
 
     def from_dict(self, data):
-        """Fill Thirdparty attributes from given dictionary."""
         for field in ['first_name', 'last_name', 'email', 'phone']:
             if field in data:
                 setattr(self, field, data[field])

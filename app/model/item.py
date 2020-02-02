@@ -1,9 +1,3 @@
-"""
-Data model for items.
-
-Every item has a registry, name, description and category.
-"""
-
 from app.model import db
 import app.controller.utils as utils
 
@@ -22,8 +16,6 @@ definition = {
 
 
 class Item(db.Model):
-    """Data model for items."""
-
     id = db.Column(db.Integer, primary_key=True)
     registry = db.Column(db.String(32), unique=True, nullable=True)
     name = db.Column(db.String(120), nullable=False)
@@ -37,7 +29,6 @@ class Item(db.Model):
     lendings = db.relationship('Lending', backref='item', lazy=True)
 
     def to_dict(self):
-        """Return a Item object formatted as dict."""
         obj = {
             "id": self.id,
             "registry": self.registry,
@@ -49,7 +40,6 @@ class Item(db.Model):
         return obj
 
     def from_dict(self, data):
-        """Fill Item attributes from given dictionary."""
         for field in ['registry', 'name', 'description', 'category_id',
                       'available']:
             if field in data:

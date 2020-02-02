@@ -1,19 +1,6 @@
-"""
-Data model for lendings.
-
-Every lending has a name, begin, end and return dates.
-"""
-
 from datetime import datetime as dt
 from app.model import db
 import app.controller.utils as utils
-
-# def format_datetime(string):
-#     return dt.strftime(string, '%Y-%m-%dT%H:%M')
-#
-#
-# def parse_datetime(datetime):
-#     return dt.strptime(datetime, '%Y-%m-%dT%H:%M')
 
 
 definition = {
@@ -31,8 +18,6 @@ definition = {
 
 
 class Lending(db.Model):
-    """Data model for lendings."""
-
     id = db.Column(db.Integer, primary_key=True)
     date_start = db.Column(db.DateTime, nullable=False,
                            default=dt.utcnow)
@@ -55,7 +40,6 @@ class Lending(db.Model):
                               nullable=True)
 
     def to_dict(self):
-        """Return a Lending object formatted as dict."""
         obj = {
             "id": self.id,
             "item_id": self.item_id,
@@ -72,7 +56,6 @@ class Lending(db.Model):
         return obj
 
     def from_dict(self, data):
-        """Fill Lending attributes from given dictionary."""
         for field in ['date_start', 'date_end', 'date_return', 'item_id',
                       'user_id', 'thirdparty_id']:
             if field in data:
