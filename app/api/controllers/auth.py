@@ -15,7 +15,6 @@ class Admin:
 
 
 def token_required(view):
-    """Require user authentication."""
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -27,7 +26,6 @@ def token_required(view):
 
 
 def admin_required(view):
-    """Require user authentication."""
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -42,7 +40,6 @@ def admin_required(view):
 
 @api.route('/login', methods=['POST'])
 def login():
-    """Validate user's credentials."""
     data = request.get_json() or {}
 
     if 'email' not in data or 'password' not in data:
@@ -66,7 +63,6 @@ def login():
 @api.route('/changepassword', methods=['PUT'])
 @token_required
 def change_password():
-    """Validate user's credentials."""
     data = request.get_json() or {}
 
     if 'old_password' not in data \
@@ -89,14 +85,12 @@ def change_password():
 @api.route('/logout', methods=['GET'])
 @token_required
 def logout():
-    """Log out from every device."""
     g.user.revoke_token()
     return '', 204
 
 
 @api.before_app_request
 def load_logged_in_user():
-    """Get logged user before every request."""
     token = request.headers.get('Authorization')
 
     if token is None:

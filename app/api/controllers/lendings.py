@@ -1,18 +1,3 @@
-"""Lendings API.
-
-This module maps the API endpoints for the Lending data model, implementing
-the POST, GET, PUT and DELETE http methods for its CRUD operations,
-respectively.
-
-Endpoints
----------
-    GET - /lendings - return the collection of all lendings.
-    GET - /lendings/<id> - return a lending with given id number.
-    POST - /lendings - register a new lending.
-    PUT - /lendings/<id> - modify a lending with given id number.
-    DELETE - /lendings/<id> - remove a lending with id number.
-
-"""
 from flask import (
     jsonify, request
 )
@@ -26,11 +11,9 @@ from app.api import api
 from app.api.controllers.auth import token_required
 
 
-# Create
 @api.route('/lendings', methods=['POST'])
 @token_required
 def create_lending():
-    """Create new lending."""
     data = request.get_json() or {}
 
     error = Lending.check_data(data=data, new=True)
@@ -61,43 +44,35 @@ def create_lending():
     return jsonify(lending.to_dict()), 201
 
 
-# Read
 @api.route('/lendings', methods=['GET'])
 @token_required
 def get_open_lendings():
-    """Return list of lendings."""
     return jsonify(
         [lending.to_dict() for lending
             in Lending.query.filter(Lending.date_return == None)]
     )
 
 
-# Read
 @api.route('/lendings/all', methods=['GET'])
 @token_required
 def get_all_lendings():
-    """Return list of lendings."""
     return jsonify(
         [lending.to_dict() for lending in Lending.query.all()]
     )
 
 
-# Read
 @api.route('/lendings/<int:id>', methods=['GET'])
 @token_required
 def get_lending(id: int):
-    """Return lending with given id."""
     lending = Lending.query.filter_by(id=id).first()
     if lending is None:
         return not_found('empréstimo não encontrado')
     return jsonify(lending.to_dict())
 
 
-# Update
 @api.route('/lendings/<int:id>', methods=['PUT'])
 @token_required
 def update_lending(id: int):
-    """Update given lending, if exists."""
     lending = Lending.query.filter_by(id=id).first()
     if lending is None:
         return not_found('empréstimo não encontrado')
@@ -132,11 +107,9 @@ def update_lending(id: int):
     return jsonify(lending.to_dict())
 
 
-# Delete
 @api.route('/lendings/<int:id>', methods=['DELETE'])
 @token_required
 def delete_lending(id: int):
-    """Delete given lending, if exists."""
     lending = Lending.query.filter_by(id=id).first()
     if lending is None:
         return not_found('empréstimo não encontrado')

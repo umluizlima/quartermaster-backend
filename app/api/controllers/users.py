@@ -13,11 +13,9 @@ from app.api.controllers.auth import (
 )
 
 
-# Create
 @api.route('/users', methods=['POST'])
 @admin_required
 def create_user():
-    """Create new user."""
     data = request.get_json() or {}
 
     error = User.check_data(data=data, new=True)
@@ -42,7 +40,6 @@ def create_user():
 @api.route('/users', methods=['GET'])
 @token_required
 def get_users():
-    """Return a JSON of all existing Users."""
     return jsonify(
         [user.to_dict() for user in User.query.all()]
     )
@@ -51,7 +48,6 @@ def get_users():
 @api.route('/users/<int:id>', methods=['GET'])
 @token_required
 def get_user(id):
-    """Return given user by id, if exists."""
     user = User.query.filter_by(id=id).first()
     if user is None:
         return not_found('usuário não encontrado')
@@ -61,7 +57,6 @@ def get_user(id):
 @api.route('/users/<int:id>', methods=['PUT'])
 @admin_required
 def update_user(id):
-    """Update given user, if exists."""
     user = User.query.filter_by(id=id).first()
     if user is None:
         return not_found('usuário não encontrado')
@@ -86,7 +81,6 @@ def update_user(id):
 @api.route('/users/<int:id>', methods=['DELETE'])
 @admin_required
 def delete_user(id):
-    """Delete given user, if exists."""
     user = User.query.filter_by(id=id).first()
     if user is None:
         return not_found('usuário não encontrado')

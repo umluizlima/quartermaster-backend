@@ -15,7 +15,6 @@ TYPES = {
 
 
 def check_name(data: dict, key: str) -> Any:
-    """Verifica se o valor na chave atende o padrão de nome."""
     if key in data and type(data[key]) == str:
         name_regex = re.compile(
             r'\w+( \w+)*'
@@ -26,7 +25,6 @@ def check_name(data: dict, key: str) -> Any:
 
 
 def check_email(data: dict, key: str) -> Any:
-    """Verifica se o valor na chave atende o padrão de email."""
     if key in data and type(data[key]) == str:
         email_regex = re.compile(
             r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
@@ -37,7 +35,6 @@ def check_email(data: dict, key: str) -> Any:
 
 
 def check_datetime(data: dict, key: str) -> Any:
-    """Verifica se o valor na chave atende o padrão de data-hora."""
     if key in data and type(data[key]) == str:
         datetime_regex = re.compile(
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$'
@@ -52,7 +49,6 @@ def check_datetime(data: dict, key: str) -> Any:
 
 
 def check_phone(data: dict, key: str) -> Any:
-    """Verifica se o valor na chave atende o padrão de telefone."""
     if key in data and type(data[key]) == str:
         phone_regex = re.compile(
             r'(^(\+?[1-9]{1}[0-9]*)?([ -]*[0-9 ]*)+$)'
@@ -67,7 +63,6 @@ def check_data(
     definition: dict,
     new: bool
 ) -> Any:
-    """Veririca se as chaves no dicionário tem tipos corretos."""
     if len(data) == 0:
         return 'pedido vazio'
     for key, value in data.items():
